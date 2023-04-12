@@ -49,8 +49,6 @@ RSpec.describe "User Request" do
 				expect(error[:title]).to be_a String
 				expect(error[:title]).to eq("Email is invalid")
 			end
-
-			expect(respose_body).to eq(1)
 		end
   end
 end

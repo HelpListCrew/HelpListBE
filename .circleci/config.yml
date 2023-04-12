@@ -13,8 +13,8 @@ jobs:
           RAILS_ENV: test
       - image: postgres:13.2
         environment:
-          POSTGRES_USER: HelpListBE # THIS SHOULD BE NAME OF YOUR APP
-          POSTGRES_DB: HelpListBE_test # find db name in /config/database.yml
+          POSTGRES_USER: help_list_be # THIS SHOULD BE NAME OF YOUR APP
+          POSTGRES_DB: help_list_be_test # find db name in /config/database.yml
           POSTGRES_PASSWORD:
     executor: ruby/default
     steps:
