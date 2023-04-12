@@ -5,8 +5,7 @@ RSpec.describe "User Request" do
     it "creates a new user" do
       user_params = ({
                       email: "abc@123.com",
-                      password: "password123",
-                      password_confirmation: "password123"
+                      password: "password123"
                     })
 
       headers = { "CONTENT_TYPE" => "application/json" }
