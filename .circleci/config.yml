@@ -1,0 +1,27 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@1.4.0
+
+jobs:
+  build:
+    working_directory: ~/HelpListBE # THIS SHOULD BE NAME OF YOUR APP
+    docker:
+      - image: cimg/ruby:3.1.1
+        environment:
+          PGHOST: localhost
+          PGUSER: help_list_be # THIS SHOULD BE NAME OF YOUR APP
+          RAILS_ENV: test
+      - image: postgres:13.2
+        environment:
+          POSTGRES_USER: help_list_be # THIS SHOULD BE NAME OF YOUR APP
+          POSTGRES_DB: help_list_be_test # find db name in /config/database.yml
+          POSTGRES_PASSWORD:
+    executor: ruby/default
+    steps:
+      - checkout
+      - run:
+          name: HelpListBE # THIS SHOULD BE NAME OF YOUR APP
+          command: bundle -v
+      - checkout
+      - run: bundle install --path vendor/bundle
+      - run: bundle exec rspec
