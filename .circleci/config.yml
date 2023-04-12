@@ -4,23 +4,23 @@ orbs:
 
 jobs:
   build:
-    working_directory: ~/do_good_web # THIS SHOULD BE NAME OF YOUR APP
+    working_directory: ~/helplistbe # THIS SHOULD BE NAME OF YOUR APP
     docker:
       - image: cimg/ruby:3.1.1
         environment:
           PGHOST: localhost
-          PGUSER: do_good_web # THIS SHOULD BE NAME OF YOUR APP
+          PGUSER: helplistbe # THIS SHOULD BE NAME OF YOUR APP
           RAILS_ENV: test
       - image: postgres:13.2
         environment:
-          POSTGRES_USER: do_good_web # THIS SHOULD BE NAME OF YOUR APP
-          POSTGRES_DB: do_good_web_test # find db name in /config/database.yml
+          POSTGRES_USER: helplistbe # THIS SHOULD BE NAME OF YOUR APP
+          POSTGRES_DB: helplistbe_test # find db name in /config/database.yml
           POSTGRES_PASSWORD:
     executor: ruby/default
 		steps:
       - checkout
       - run:
-          name: do_good_web # THIS SHOULD BE NAME OF YOUR APP
+          name: helplistbe # THIS SHOULD BE NAME OF YOUR APP
           command: bundle -v
       - checkout
       - run: bundle install --path vendor/bundle
