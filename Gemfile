@@ -46,3 +46,14 @@ group :development do
   # gem "spring"
 end
 
+group :test do
+  gem "capybara"
+  gem "pry"
+  gem "simplecov"
+  gem "rspec-rails"
+  gem "shoulda-matchers"
+  gem "factory_bot_rails"
+  gem "faker"
+end
+
+
