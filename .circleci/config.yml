@@ -4,23 +4,23 @@ orbs:
 
 jobs:
   build:
-    working_directory: ~/helplistbe # THIS SHOULD BE NAME OF YOUR APP
+    working_directory: ~/HelpListBE # THIS SHOULD BE NAME OF YOUR APP
     docker:
       - image: cimg/ruby:3.1.1
         environment:
           PGHOST: localhost
-          PGUSER: helplistbe # THIS SHOULD BE NAME OF YOUR APP
+          PGUSER: HelpListBE # THIS SHOULD BE NAME OF YOUR APP
           RAILS_ENV: test
       - image: postgres:13.2
         environment:
-          POSTGRES_USER: helplistbe # THIS SHOULD BE NAME OF YOUR APP
-          POSTGRES_DB: helplistbe_test # find db name in /config/database.yml
+          POSTGRES_USER: HelpListBE # THIS SHOULD BE NAME OF YOUR APP
+          POSTGRES_DB: HelpListBE_test # find db name in /config/database.yml
           POSTGRES_PASSWORD:
     executor: ruby/default
-		steps:
+    steps:
       - checkout
       - run:
-          name: helplistbe # THIS SHOULD BE NAME OF YOUR APP
+          name: HelpListBE # THIS SHOULD BE NAME OF YOUR APP
           command: bundle -v
       - checkout
       - run: bundle install --path vendor/bundle
