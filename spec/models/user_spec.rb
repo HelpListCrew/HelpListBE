@@ -4,7 +4,7 @@ RSpec.describe User do
   describe "relationships" do
     it { should have_many :organization_users }
     it { should have_many :wishlist_items }
-    it { should have_many :user_wishlist_items }
+    it { should have_many :donor_items }
     it { should have_many(:organizations).through(:organization_users) }
   end
 
