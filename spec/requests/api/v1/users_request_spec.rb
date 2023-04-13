@@ -1,6 +1,27 @@
 require "rails_helper"
 
 RSpec.describe "User Request" do
+	describe "Users Get" do
+		before do
+			create_list(:user, 3)
+			@user = User.first
+		end
+
+		it "gets all users" do
+			get api_v1_users_path
+			parsed = JSON.parse(response.body, symbolize_names: true)
+
+			expect(response).to be_successful
+			expect(parsed[:data].size).to eq(3)
+			expect(parsed[:data]).to be_an(Array)
+			expect(parsed[:data][0].keys).to eq([:id, :type, :attributes])
+			expect(parsed[:data][0][:id]).to eq(@user.id.to_s)
+			expect(parsed[:data][0][:type]).to eq("user")
+			expect(parsed[:data][0][:attributes][:email]).to eq(@user.email)
+			expect(parsed[:data][0][:attributes][:user_type]).to eq("donor")
+		end
+	end
+
 	describe "User Get" do
 		before do
 			@user = create(:user)
@@ -9,9 +30,10 @@ RSpec.describe "User Request" do
 		context "when successful" do
 			it "gets one user" do
 				get api_v1_user_path(@user)
-				parsed = JSON.parse(response.body, symbolize_names: true)
 
+				parsed = JSON.parse(response.body, symbolize_names: true)
 				expect(response).to be_successful
+				expect(parsed[:data]).to be_a(Hash)
 				expect(parsed[:data].keys).to eq([:id, :type, :attributes])
 				expect(parsed[:data][:id]).to eq(@user.id.to_s)
 				expect(parsed[:data][:type]).to eq("user")
