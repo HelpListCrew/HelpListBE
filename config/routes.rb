@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:create, :show, :index]
       resources :wishlist_items, only: [:show, :index, :create]
+      post "/login", to: "users#login_user"
     end
   end
+
 end
