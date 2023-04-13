@@ -17,4 +17,14 @@ class ErrorSerializer
 		end
 		hash
 	end
+
+	def self.failed_auth
+		{
+			message: "your query could not be completed",
+			errors: {
+				"status": 404,
+				"title": "Not authenticated"
+			}
+		}
+	end
 end
