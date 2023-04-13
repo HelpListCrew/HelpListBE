@@ -56,4 +56,67 @@ RSpec.describe "Wishlist Items Request" do
       end
     end
   end
+
+  describe "Create Wishlist Item" do
+    context "when successful" do
+      it "creates a new wishlist item" do
+        recipient = create(:user, user_type: 1)
+
+        wishlist_item_params = ({
+                                recipient_id: recipient.id, 
+                                api_item_id: 1
+                               })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        post api_v1_wishlist_items_path, headers: headers, params: JSON.generate(wishlist_item: wishlist_item_params)
+
+        created_wishlist_item = WishlistItem.last
+
+        expect(response).to be_successful
+        expect(created_wishlist_item.api_item_id).to eq(1)
+        expect(created_wishlist_item.purchased).to eq(false)
+        expect(created_wishlist_item.received).to eq(false)
+      end
+    end
+
+    context "when unsuccessful" do
+      it "returns 400 error when missing recipient_id" do
+        wishlist_item_params = ({
+                                 api_item_id: 1
+                               })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        post api_v1_wishlist_items_path, headers: headers, params: JSON.generate(wishlist_item: wishlist_item_params)
+        
+        response_body = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response_body.keys).to match([:message, :errors])
+        expect(response_body[:message]).to eq("your query could not be completed")
+        expect(response_body[:errors].first[:status]).to eq("400")
+        expect(response_body[:errors].first[:title]).to eq("Recipient must exist")
+      end
+
+      it "returns 400 error when invalid data type submitted" do
+        recipient = create(:user, user_type: 1)
+
+        wishlist_item_params = ({
+                                recipient_id: recipient.id, 
+                                api_item_id: "one"
+                               })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        post api_v1_wishlist_items_path, headers: headers, params: JSON.generate(wishlist_item: wishlist_item_params)
+
+        response_body = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response_body.keys).to match([:message, :errors])
+        expect(response_body[:message]).to eq("your query could not be completed")
+        expect(response_body[:errors].first[:status]).to eq("400")
+        expect(response_body[:errors].first[:title]).to eq("Api item is not a number")
+      end
+    end
+  end
 end

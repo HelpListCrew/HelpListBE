@@ -56,8 +56,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_001418) do
   create_table "wishlist_items", force: :cascade do |t|
     t.bigint "recipient_id", null: false
     t.integer "api_item_id"
-    t.boolean "purchased"
-    t.boolean "received"
+    t.boolean "purchased", default: false
+    t.boolean "received", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["recipient_id"], name: "index_wishlist_items_on_recipient_id"

@@ -12,4 +12,4 @@ donor = User.create!(email: "donor@gmail.com", password: "123")
 
 User.first.wishlist_items.create!(api_item_id: 1)
 
-WishlistItem.first.donor_items.create!(donor: donor)
+DonorItem.create!(donor: donor, wishlist_item: WishlistItem.first)
