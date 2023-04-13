@@ -1,4 +1,4 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < Api::ApiController
 	def show
 		render json: UserSerializer.new(User.find(params[:id]))
 	end

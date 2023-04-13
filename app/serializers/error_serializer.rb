@@ -1,4 +1,6 @@
 class ErrorSerializer
+	attr_reader :status
+
 	def initialize(object, status=404)
 		@object = object
 		@status = status
@@ -11,10 +13,22 @@ class ErrorSerializer
 		}
 		@object.errors.each do |error|
 			hash[:errors] << {
-				"status": @status.to_s,
+				"status": status.to_s,
 				"title": error.full_message
 			}
 		end
 		hash
+	end
+
+	def error
+		{
+		 	message: "your query could not be completed",
+			errors: [
+					{
+			 			status: status.to_s,
+						title: @object.message,
+					}
+				]
+			}
 	end
 end
