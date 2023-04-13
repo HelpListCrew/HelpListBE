@@ -10,7 +10,7 @@ class ErrorSerializer
     {
 			message: "your query could not be completed",
 			errors: [{
-				"status": 401
+				"status": 401,
 				"title": "Invalid credentials"
 			}]
 		}
