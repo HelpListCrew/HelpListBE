@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :donor_item do
     wishlist_item
-    user
+    donor { create(:user) }
   end
 end

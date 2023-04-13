@@ -1,7 +1,7 @@
 class ErrorSerializer
 	attr_reader :status
 
-	def initialize(object, status=404)
+	def initialize(object)
 		@object = object
 		@status = status
 	end
@@ -31,4 +31,9 @@ class ErrorSerializer
 				]
 			}
 	end
+
+  def status
+    return 404 if @object.class == ActiveRecord::RecordNotFound
+    400
+  end
 end
