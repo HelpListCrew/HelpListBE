@@ -6,6 +6,16 @@ class ErrorSerializer
 		@status = status
 	end
 
+  def self.failed_auth
+    {
+			message: "your query could not be completed",
+			errors: [{
+				"status": 401,
+				"title": "Invalid credentials"
+			}]
+		}
+  end
+
 	def user_error
 		hash = {
 			message: "your query could not be completed",

@@ -104,4 +104,56 @@ RSpec.describe "User Request" do
 			end
 		end
   end
+
+  describe "Log in a User" do
+    before :each do 
+      @user = create(:user)
+    end
+
+    it "authenticates a user when given vaild parameters" do 
+      user_params = ({
+            email: @user.email,
+            password: @user.password
+          })
+
+      headers = { "CONTENT_TYPE" => "application/json" }
+
+      post "/api/v1/login", headers: headers, params: JSON.generate( user: user_params )
+      
+			response_body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+
+      expect(response_body[:data]).to be_a(Hash)
+      expect(response_body[:data].keys).to eq([:id, :type, :attributes])
+      expect(response_body[:data][:id]).to eq(@user.id.to_s)
+      expect(response_body[:data][:type]).to eq("user")
+      expect(response_body[:data][:attributes].size).to eq(2)
+      expect(response_body[:data][:attributes][:email]).to eq(@user.email)
+      expect(response_body[:data][:attributes][:user_type]).to eq("donor")
+    end
+
+    it "does not autheticate a user with no creditentials" do
+      user_params = ({
+            email: "",
+            password: ""
+          })
+      headers = { "CONTENT_TYPE" => "application/json" }
+
+      post "/api/v1/login", headers: headers, params: JSON.generate( user: user_params )
+      
+			response_body = JSON.parse(response.body, symbolize_names: true)
+      
+      expect(response).to_not be_successful
+
+      expect(response_body).to have_key(:message)
+      expect(response_body).to have_key(:errors)
+      expect(response_body[:message]).to eq("your query could not be completed")
+
+      response_body[:errors].each do |error|
+        expect(error[:status]).to eq(401)
+        expect(error[:title]).to eq("Invalid credentials")
+      end
+    end
+  end
 end
