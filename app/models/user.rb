@@ -1,7 +1,8 @@
 class User < ApplicationRecord
   has_many :organization_users
   has_many :organizations, through: :organization_users
-  has_many :wishlist_items
+  # has_many :wishlist_items
+  has_many :wishlist_items, foreign_key: :recipient_id, inverse_of: :recipient
   has_many :user_wishlist_items
 
   enum user_type: ["donor", "recipient"]

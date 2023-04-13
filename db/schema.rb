@@ -38,10 +38,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_001418) do
 
   create_table "user_wishlist_items", force: :cascade do |t|
     t.bigint "wishlist_item_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "donor_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_wishlist_items_on_user_id"
+    t.index ["donor_id"], name: "index_user_wishlist_items_on_donor_id"
     t.index ["wishlist_item_id"], name: "index_user_wishlist_items_on_wishlist_item_id"
   end
 
@@ -54,18 +54,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_001418) do
   end
 
   create_table "wishlist_items", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "recipient_id", null: false
     t.integer "api_item_id"
     t.boolean "purchased"
     t.boolean "received"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_wishlist_items_on_user_id"
+    t.index ["recipient_id"], name: "index_wishlist_items_on_recipient_id"
   end
 
   add_foreign_key "organization_users", "organizations"
   add_foreign_key "organization_users", "users"
-  add_foreign_key "user_wishlist_items", "users"
+  add_foreign_key "user_wishlist_items", "users", column: "donor_id"
   add_foreign_key "user_wishlist_items", "wishlist_items"
-  add_foreign_key "wishlist_items", "users"
+  add_foreign_key "wishlist_items", "users", column: "recipient_id"
 end
