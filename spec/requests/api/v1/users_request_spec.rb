@@ -1,6 +1,59 @@
 require "rails_helper"
 
 RSpec.describe "User Request" do
+	describe "Users Get" do
+		before do
+			create_list(:user, 3)
+			@user = User.first
+		end
+
+		it "gets all users" do
+			get api_v1_users_path
+			parsed = JSON.parse(response.body, symbolize_names: true)
+
+			expect(response).to be_successful
+			expect(parsed[:data].size).to eq(3)
+			expect(parsed[:data]).to be_an(Array)
+			expect(parsed[:data][0].keys).to eq([:id, :type, :attributes])
+			expect(parsed[:data][0][:id]).to eq(@user.id.to_s)
+			expect(parsed[:data][0][:type]).to eq("user")
+			expect(parsed[:data][0][:attributes][:email]).to eq(@user.email)
+			expect(parsed[:data][0][:attributes][:user_type]).to eq("donor")
+		end
+	end
+
+	describe "User Get" do
+		before do
+			@user = create(:user)
+		end
+		
+		context "when successful" do
+			it "gets one user" do
+				get api_v1_user_path(@user)
+
+				parsed = JSON.parse(response.body, symbolize_names: true)
+				expect(response).to be_successful
+				expect(parsed[:data]).to be_a(Hash)
+				expect(parsed[:data].keys).to eq([:id, :type, :attributes])
+				expect(parsed[:data][:id]).to eq(@user.id.to_s)
+				expect(parsed[:data][:type]).to eq("user")
+				expect(parsed[:data][:attributes].size).to eq(2)
+				expect(parsed[:data][:attributes][:email]).to eq(@user.email)
+				expect(parsed[:data][:attributes][:user_type]).to eq("donor")
+			end
+		end
+
+		context "when unsuccessful" do
+			it "returns a 404 error" do
+				get api_v1_user_path("9938794823784")
+				parsed = JSON.parse(response.body, symbolize_names: true)
+
+				expect(response).to have_http_status(404)
+				expect(parsed[:errors].first[:title]).to eq("Couldn't find User with 'id'=9938794823784")
+			end
+		end
+	end
+
   describe "User Create" do
     it "creates a new user" do
       user_params = ({
@@ -44,11 +97,63 @@ RSpec.describe "User Request" do
 				expect(error.keys).to match([:status, :title])
 
 				expect(error[:status]).to be_a String
-				expect(error[:status]).to eq("404")
+				expect(error[:status]).to eq("400")
 
 				expect(error[:title]).to be_a String
 				expect(error[:title]).to eq("Email is invalid")
 			end
 		end
+  end
+
+  describe "Log in a User" do
+    before :each do 
+      @user = create(:user)
+    end
+
+    it "authenticates a user when given vaild parameters" do 
+      user_params = ({
+            email: @user.email,
+            password: @user.password
+          })
+
+      headers = { "CONTENT_TYPE" => "application/json" }
+
+      post "/api/v1/login", headers: headers, params: JSON.generate( user: user_params )
+      
+			response_body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+
+      expect(response_body[:data]).to be_a(Hash)
+      expect(response_body[:data].keys).to eq([:id, :type, :attributes])
+      expect(response_body[:data][:id]).to eq(@user.id.to_s)
+      expect(response_body[:data][:type]).to eq("user")
+      expect(response_body[:data][:attributes].size).to eq(2)
+      expect(response_body[:data][:attributes][:email]).to eq(@user.email)
+      expect(response_body[:data][:attributes][:user_type]).to eq("donor")
+    end
+
+    it "does not autheticate a user with no creditentials" do
+      user_params = ({
+            email: "",
+            password: ""
+          })
+      headers = { "CONTENT_TYPE" => "application/json" }
+
+      post "/api/v1/login", headers: headers, params: JSON.generate( user: user_params )
+      
+			response_body = JSON.parse(response.body, symbolize_names: true)
+      
+      expect(response).to_not be_successful
+
+      expect(response_body).to have_key(:message)
+      expect(response_body).to have_key(:errors)
+      expect(response_body[:message]).to eq("your query could not be completed")
+
+      response_body[:errors].each do |error|
+        expect(error[:status]).to eq(401)
+        expect(error[:title]).to eq("Invalid credentials")
+      end
+    end
   end
 end

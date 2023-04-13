@@ -1,8 +1,20 @@
 class ErrorSerializer
-	def initialize(object, status=404)
+	attr_reader :status
+
+	def initialize(object)
 		@object = object
 		@status = status
 	end
+
+  def self.failed_auth
+    {
+			message: "your query could not be completed",
+			errors: [{
+				"status": 401,
+				"title": "Invalid credentials"
+			}]
+		}
+  end
 
 	def user_error
 		hash = {
@@ -11,20 +23,27 @@ class ErrorSerializer
 		}
 		@object.errors.each do |error|
 			hash[:errors] << {
-				"status": @status.to_s,
+				"status": status.to_s,
 				"title": error.full_message
 			}
 		end
 		hash
 	end
 
-	def self.failed_auth
+	def error
 		{
-			message: "your query could not be completed",
-			errors: {
-				"status": 404,
-				"title": "Not authenticated"
+		 	message: "your query could not be completed",
+			errors: [
+					{
+			 			status: status.to_s,
+						title: @object.message,
+					}
+				]
 			}
-		}
 	end
+
+  def status
+    return 404 if @object.class == ActiveRecord::RecordNotFound
+    400
+  end
 end
