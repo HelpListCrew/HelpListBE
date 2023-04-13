@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe UserWishlistItem do
+RSpec.describe DonorItem do
   describe "relationships" do
 
   end

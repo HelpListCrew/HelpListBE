@@ -5,8 +5,11 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+organization = FactoryBot.create(:organization)
+organization.users.create!(email: "recipient@gmail.com", password: "123", user_type: 1)
 
-User.create!(email: "recipient@gmail.com", password: "123")
 donor = User.create!(email: "donor@gmail.com", password: "123")
+
 User.first.wishlist_items.create!(api_item_id: 1)
-WishlistItem.first.user_wishlist_items.create!(donor: donor)
+
+WishlistItem.first.donor_items.create!(donor: donor)
