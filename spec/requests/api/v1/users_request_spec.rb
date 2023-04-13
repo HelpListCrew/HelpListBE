@@ -97,7 +97,7 @@ RSpec.describe "User Request" do
 				expect(error.keys).to match([:status, :title])
 
 				expect(error[:status]).to be_a String
-				expect(error[:status]).to eq("404")
+				expect(error[:status]).to eq("400")
 
 				expect(error[:title]).to be_a String
 				expect(error[:title]).to eq("Email is invalid")
