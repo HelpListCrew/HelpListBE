@@ -11,6 +11,6 @@ class Api::V1::UsersController < ApplicationController
 
   private
 	def user_params
-		JSON.parse(params[:user], symbolize_names: true)
+		params.require(:user).permit(:email, :password, :user_type)
 	end
 end
