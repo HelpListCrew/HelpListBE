@@ -119,4 +119,62 @@ RSpec.describe "Wishlist Items Request" do
       end
     end
   end
+
+  describe "Update Wishlist Item" do
+    before(:each) do
+      @recipient = create(:user, user_type: 1)
+      @wishlist_item = create(:wishlist_item, recipient: @recipient)
+    end
+
+    context "when successful" do
+      it "updates a wishlist item attribute" do
+        wishlist_item_params = ({
+                                purchased: true,
+                                received: true
+                               })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        patch api_v1_wishlist_item_path(@wishlist_item), headers: headers, params: JSON.generate(wishlist_item: wishlist_item_params)
+
+        updated_wishlist_item = WishlistItem.last
+
+        expect(response).to be_successful
+        expect(updated_wishlist_item.purchased).to eq(true)
+        expect(updated_wishlist_item.received).to eq(true)
+      end
+    end
+
+    context "when unsuccessful" do
+      it "sends a 404 Not Found status when item id not found" do
+        patch api_v1_wishlist_item_path(0)
+
+        expect(response.status).to eq(404)
+
+        parsed_error = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_error.keys).to match([:message, :errors])
+        expect(parsed_error[:message]).to eq("your query could not be completed")
+        expect(parsed_error[:errors].first[:status]).to eq("404")
+        expect(parsed_error[:errors].first[:title]).to eq("Couldn't find WishlistItem with 'id'=0")
+      end
+
+      it "sends a 400 status when invalid parameters" do
+        wishlist_item_params = ({
+                                api_item_id: "one"
+                               })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        patch api_v1_wishlist_item_path(@wishlist_item), headers: headers, params: JSON.generate(wishlist_item: wishlist_item_params)
+
+        parsed_error = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to_not be_successful
+        expect(parsed_error[:message]).to eq("your query could not be completed")
+        expect(parsed_error[:errors].first[:status]).to eq("400")
+        expect(parsed_error[:errors].first[:title]).to eq("Validation failed: Api item is not a number")
+      end
+    end
+  end
 end
