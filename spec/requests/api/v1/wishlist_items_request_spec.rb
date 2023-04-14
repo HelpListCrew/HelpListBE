@@ -189,6 +189,17 @@ RSpec.describe "Wishlist Items Request" do
         expect(parsed_error[:errors].first[:status]).to eq("400")
         expect(parsed_error[:errors].first[:title]).to eq("Validation failed: Api item is not a number")
       end
+
+      it "sends a 400 status when no params are passed" do
+        patch api_v1_wishlist_item_path(@wishlist_item)
+
+        parsed_error = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to_not be_successful
+        expect(parsed_error[:message]).to eq("your query could not be completed")
+        expect(parsed_error[:errors].first[:status]).to eq("400")
+        expect(parsed_error[:errors].first[:title]).to eq("param is missing or the value is empty: wishlist_item")
+      end
     end
   end
 

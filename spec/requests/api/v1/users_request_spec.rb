@@ -203,4 +203,46 @@ RSpec.describe "User Request" do
       end
     end
   end
+
+  describe "Destroy User" do
+    context "when context" do
+      it "can destroy a user" do
+        user = create(:user)
+
+        expect(User.count).to eq(1)
+
+        delete "/api/v1/users/#{user.id}"
+
+        expect(response).to be_successful
+        expect(response.status).to eq(204)
+        expect(User.count).to eq(0)
+        expect{User.find(user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "destroys associated wishlist items when recipient is deleted" do 
+        recipient = create(:user, user_type: "recipient")
+        recipient_item = create(:wishlist_item, recipient: recipient)
+      
+        delete "/api/v1/users/#{recipient.id}"
+
+        expect(response).to be_successful
+        expect(WishlistItem.count).to eq(0)
+        expect{WishlistItem.find(recipient_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when unsuccessful" do
+      it "sends raises an error when a user does not exist" do
+         user = create(:user)
+
+        expect(User.count).to eq(1)
+
+        delete "/api/v1/users/thisisnotauserid"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(404)
+        expect(User.count).to eq(1)
+      end
+    end
+  end
 end
