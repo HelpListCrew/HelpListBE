@@ -117,6 +117,21 @@ RSpec.describe "Wishlist Items Request" do
         expect(response_body[:errors].first[:status]).to eq("400")
         expect(response_body[:errors].first[:title]).to eq("Api item is not a number")
       end
+
+      it "returns 400 error when no params are passed" do
+        recipient = create(:user, user_type: 1)
+
+        post api_v1_wishlist_items_path
+
+        response_body = JSON.parse(response.body, symbolize_names: true)
+        
+        expect(response).to_not be_successful
+
+        expect(response_body.keys).to match([:message, :errors])
+        expect(response_body[:message]).to eq("your query could not be completed")
+        expect(response_body[:errors].first[:status]).to eq("400")
+        expect(response_body[:errors].first[:title]).to eq("param is missing or the value is empty: wishlist_item")
+      end
     end
   end
 
