@@ -22,6 +22,11 @@ class Api::V1::UsersController < Api::ApiController
     end
   end
 
+  def destroy
+   User.destroy(params[:id])
+   render status: 204
+  end
+
 	def update
 		user = User.find(params[:id])
 
