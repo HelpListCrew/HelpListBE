@@ -25,6 +25,11 @@ class Api::V1::OrganizationsController < Api::ApiController
     render json: OrganizationSerializer.new(organization)
   end
 
+  def destroy
+    Organization.destroy(params[:id])
+    render status: 204
+  end
+
   private
 	def organization_params
 		params.require(:organization).permit(:name, :street_address, :city, :state, :zip_code, :email, :phone_number, :website )

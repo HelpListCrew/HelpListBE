@@ -207,4 +207,49 @@ RSpec.describe "Organizations Request" do
       end
     end
   end
+
+  describe "Destroy Organization" do
+    context "when successful" do
+      it "destroys an organization" do
+        organization = create(:organization)
+
+        expect(Organization.count).to eq(1)
+
+        delete api_v1_organization_path(organization)
+
+        expect(response).to be_successful
+        expect(response.status).to eq(204)
+        expect(Organization.count).to eq(0)
+        expect{Organization.find(organization.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "destroys associated organization user when organization deleted" do
+        organization = create(:organization)
+        user = create(:user, user_type: 1)
+        organization_user = create(:organization_user, organization: organization, user: user)
+
+        expect(OrganizationUser.count).to eq(1)
+
+        delete api_v1_organization_path(organization)
+
+        expect(response).to be_successful
+        expect(OrganizationUser.count).to eq(0)
+        expect{Organization.find(organization_user.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when unsuccessful" do
+      it "sends a 404 Not Found status when organization not found" do
+        delete api_v1_organization_path(0)
+
+        parsed_error = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq(404)
+        expect(parsed_error[:message]).to eq("your query could not be completed")
+        expect(parsed_error[:errors].count).to eq(1)
+        expect(parsed_error[:errors].first[:status]).to eq("404")
+        expect(parsed_error[:errors].first[:title]).to eq("Couldn't find Organization with 'id'=0")
+      end
+    end
+  end
 end
