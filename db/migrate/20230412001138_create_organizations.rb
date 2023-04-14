@@ -8,6 +8,7 @@ class CreateOrganizations < ActiveRecord::Migration[7.0]
       t.string :zip_code
       t.string :email
       t.string :phone_number
+      t.string :website
 
       t.timestamps
     end

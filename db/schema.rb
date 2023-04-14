@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_224723) do
     t.string "zip_code"
     t.string "email"
     t.string "phone_number"
+    t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -50,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_224723) do
     t.integer "user_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uid", default: "2c049601ceb21880512e7deddc0200"
+    t.string "uid", default: "a545f60cce88d99793758c80a6920d"
   end
 
   create_table "wishlist_items", force: :cascade do |t|
