@@ -40,7 +40,7 @@ RSpec.describe "Organizations Request" do
         get api_v1_organization_path(organization)
 
         parsed_organization = JSON.parse(response.body, symbolize_names: true)
-        # binding.pry
+
         expect(parsed_organization[:data]).to be_a(Hash)
 				expect(parsed_organization[:data].keys).to eq([:id, :type, :attributes])
 				expect(parsed_organization[:data][:id]).to eq(organization.id.to_s)
@@ -69,6 +69,79 @@ RSpec.describe "Organizations Request" do
         expect(parsed_wishlist_item[:errors].count).to eq(1)
         expect(parsed_wishlist_item[:errors].first[:status]).to eq("404")
         expect(parsed_wishlist_item[:errors].first[:title]).to eq("Couldn't find Organization with 'id'=0")
+      end
+    end
+  end
+
+  describe "Create Organization" do
+    context "when successful" do
+      it "creates a new organization" do
+        organization_params = ({
+                                name: "name",
+                                street_address: "street_address",
+                                city: "city",
+                                state: "state",
+                                zip_code: "zip_code",
+                                email: "email",
+                                phone_number: "phone_number",
+                                website: "website"
+                              })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        post api_v1_organizations_path, headers: headers, params: JSON.generate(organization: organization_params)
+
+        created_organization = Organization.last
+
+        expect(response).to be_successful
+        expect(response.status).to eq(201)
+        expect(created_organization.name).to eq("name")
+        expect(created_organization.street_address).to eq("street_address")
+        expect(created_organization.city).to eq("city")
+        expect(created_organization.state).to eq("state")
+        expect(created_organization.zip_code).to eq("zip_code")
+        expect(created_organization.email).to eq("email")
+        expect(created_organization.phone_number).to eq("phone_number")
+        expect(created_organization.website).to eq("website")
+      end
+    end
+
+    context "when unsuccessful" do
+      it "returns 400 error when missing at least one but not all params" do
+        organization_params = ({
+                                street_address: "street_address",
+                                city: "city",
+                                state: "state",
+                                zip_code: "zip_code",
+                                phone_number: "phone_number",
+                                website: "website"
+                              })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        post api_v1_organizations_path, headers: headers, params: JSON.generate(organization: organization_params)
+
+        response_body = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response_body.keys).to match([:message, :errors])
+        expect(response_body[:message]).to eq("your query could not be completed")
+        expect(response_body[:errors].first[:status]).to eq("400")
+        expect(response_body[:errors].first[:title]).to eq("Name can't be blank")
+        expect(response_body[:errors].second[:status]).to eq("400")
+        expect(response_body[:errors].second[:title]).to eq("Email can't be blank")
+      end
+
+      it "returns 400 error when no params are passed" do
+        post api_v1_organizations_path
+
+        response_body = JSON.parse(response.body, symbolize_names: true)
+        
+        expect(response).to_not be_successful
+
+        expect(response_body.keys).to match([:message, :errors])
+        expect(response_body[:message]).to eq("your query could not be completed")
+        expect(response_body[:errors].first[:status]).to eq("400")
+        expect(response_body[:errors].first[:title]).to eq("param is missing or the value is empty: organization")
       end
     end
   end

@@ -13,7 +13,7 @@ class Api::V1::WishlistItemsController < Api::ApiController
 		if wishlist_item.save
     	render json: WishlistItemSerializer.new(wishlist_item), status: 201
 		else
-			render json: ErrorSerializer.new(wishlist_item).user_error, status: 404
+			render json: ErrorSerializer.new(wishlist_item).user_error, status: 400
     end
   end
 
