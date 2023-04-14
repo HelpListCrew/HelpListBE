@@ -17,6 +17,16 @@ class Api::V1::UsersController < Api::ApiController
     end
   end
 
+	def update
+		user = User.find(params[:id])
+
+		if user.update(user_params)
+			render json: UserSerializer.new(user), status: 201
+		else
+			render json: ErrorSerializer.new(user).user_error, status: 404
+		end
+	end
+
   private
 	def user_params
 		params.require(:user).permit(:email, :password, :user_type)
