@@ -21,6 +21,11 @@ class Api::V1::UsersController < Api::ApiController
     end
   end
 
+  def destroy
+   User.destroy(params[:id])
+   render status: 204
+  end
+
 	def login_user
 		user = User.find_by(email: user_params[:email])
 		if user && user.authenticate(user_params[:password])
