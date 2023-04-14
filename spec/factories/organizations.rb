@@ -6,7 +6,7 @@ FactoryBot.define do
     state { Faker::Address.state_abbr}
     zip_code { Faker::Address.zip }
     email { Faker::Internet.email }
-    password { Faker::Internet.password  }
     phone_number { Faker::PhoneNumber.phone_number }
+    website { Faker::Internet.url(host: 'example.com') }
   end
 end
