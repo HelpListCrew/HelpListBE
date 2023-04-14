@@ -131,7 +131,7 @@ RSpec.describe "User Request" do
 		end
 
 		context "when unsuccessful" do
-			it "returns a 404 error if invalid properties" do
+			it "returns a 400 error if invalid properties" do
 				@user_params[:email] = "abc"
 				patch api_v1_user_path(@user.id), headers: @headers, params: JSON.generate({user: @user_params})
 				response_body = JSON.parse(response.body, symbolize_names: true)
@@ -144,7 +144,7 @@ RSpec.describe "User Request" do
 					expect(error).to be_a Hash
 					expect(error.keys).to match([:status, :title])
 					expect(error[:status]).to be_a String
-					expect(error[:status]).to eq("404")
+					expect(error[:status]).to eq("400")
 					expect(error[:title]).to be_a String
 					expect(error[:title]).to eq("Email is invalid")
 				end				

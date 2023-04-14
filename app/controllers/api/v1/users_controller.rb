@@ -28,7 +28,8 @@ class Api::V1::UsersController < Api::ApiController
 		if user.update(user_params)
 			render json: UserSerializer.new(user), status: 201
 		else
-			render json: ErrorSerializer.new(user).user_error, status: 404
+			render json: ErrorSerializer.new(user).user_error, status: 400
+
 		end
 	end
 
