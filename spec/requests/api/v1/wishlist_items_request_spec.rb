@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Wishlist Items Request" do
-  describe "Get Wishlist Item" do
+  describe "Show Wishlist Item" do
     context "when successful" do
       it "retrieves a specific wishlist item" do
         wishlist_item = create(:wishlist_item)
@@ -35,7 +35,7 @@ RSpec.describe "Wishlist Items Request" do
     end
   end
 
-  describe "Get All Wishlist Items" do
+  describe "Index Wishlist Items" do
     context "when successful" do
       it "retrieves all wishlist items" do
         create_list(:wishlist_item, 3)
