@@ -51,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_224723) do
     t.integer "user_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uid"
+    t.string "uid", default: "0dd350c9d73b7b5e0104b7d98b42c8"
   end
 
   create_table "wishlist_items", force: :cascade do |t|
