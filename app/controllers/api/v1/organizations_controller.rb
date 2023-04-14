@@ -17,6 +17,14 @@ class Api::V1::OrganizationsController < Api::ApiController
     end
   end
 
+  def update
+    organization = Organization.find(params[:id])
+
+    organization.update!(organization_params)
+
+    render json: OrganizationSerializer.new(organization)
+  end
+
   private
 	def organization_params
 		params.require(:organization).permit(:name, :street_address, :city, :state, :zip_code, :email, :phone_number, :website )

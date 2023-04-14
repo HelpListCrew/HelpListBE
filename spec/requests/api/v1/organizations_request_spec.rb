@@ -145,4 +145,66 @@ RSpec.describe "Organizations Request" do
       end
     end
   end
+
+  describe "Update Organization" do
+    before(:each) do
+      @organization = create(:organization)
+    end
+    context "when successful" do
+      it "updates an existing organization" do
+        organization_params = ({
+                                name: "new_name",
+                                street_address: "new_street_address",
+                                city: "new_city",
+                                state: "new_state",
+                                zip_code: "new_zip_code",
+                                email: "new_email",
+                                phone_number: "new_phone_number",
+                                website: "new_website"
+                              })
+        
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        patch api_v1_organization_path(@organization), headers: headers, params: JSON.generate(organization: organization_params)
+
+        updated_organization = Organization.last
+
+        expect(response).to be_successful
+        expect(updated_organization.name).to eq("new_name")
+        expect(updated_organization.street_address).to eq("new_street_address")
+        expect(updated_organization.city).to eq("new_city")
+        expect(updated_organization.state).to eq("new_state")
+        expect(updated_organization.zip_code).to eq("new_zip_code")
+        expect(updated_organization.email).to eq("new_email")
+        expect(updated_organization.phone_number).to eq("new_phone_number")
+        expect(updated_organization.website).to eq("new_website")
+      end
+    end
+
+    context "when unsuccessful" do
+      it "sends a 404 Not Found status when organization id not found" do
+        patch api_v1_organization_path(0)
+
+        expect(response.status).to eq(404)
+
+        parsed_error = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_error.keys).to match([:message, :errors])
+        expect(parsed_error[:message]).to eq("your query could not be completed")
+        expect(parsed_error[:errors].first[:status]).to eq("404")
+        expect(parsed_error[:errors].first[:title]).to eq("Couldn't find Organization with 'id'=0")
+      end
+
+      it "sends a 400 status when no params are passed" do
+        patch api_v1_organization_path(@organization)
+
+        response_body = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response_body.keys).to match([:message, :errors])
+        expect(response_body[:message]).to eq("your query could not be completed")
+        expect(response_body[:errors].first[:status]).to eq("400")
+        expect(response_body[:errors].first[:title]).to eq("param is missing or the value is empty: organization")
+      end
+    end
+  end
 end
