@@ -6,10 +6,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get "/users/find_all", to: "users/search#index"
+
       resources :users, except: [:new, :destroy]
       resources :wishlist_items, only: [:show, :index, :create, :update, :destroy]
       post "/login", to: "users#login_user"
     end
   end
-
 end
