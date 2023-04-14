@@ -105,6 +105,53 @@ RSpec.describe "User Request" do
 		end
   end
 
+	describe "User Update" do
+		before do
+			@user = create(:user)
+			@previous_email = User.find_by(id: @user.id).email
+			@previous_pass = @user.password
+			@user_params = { 
+											email: "Hello@123.com",
+											password: @previous_pass
+										}
+			@headers = { "CONTENT_TYPE" => "application/json" }
+		end
+
+		context "when successful" do
+			it "it updates an existing User" do
+				patch api_v1_user_path(@user.id), headers: @headers, params: JSON.generate({user: @user_params})
+				parsed = JSON.parse(response.body, symbolize_names: true)
+				updated_user = User.find_by(id: @user.id)
+				expect(response).to be_successful
+				expect(parsed[:data]).to be_a(Hash)
+				expect(parsed[:data].keys).to eq([:id, :type, :attributes])
+				expect(parsed[:data][:attributes][:email]).to eq(updated_user.email)
+				expect(parsed[:data][:attributes][:email]).to_not eq(@previous_email)
+			end
+		end
+
+		context "when unsuccessful" do
+			it "returns a 400 error if invalid properties" do
+				@user_params[:email] = "abc"
+				patch api_v1_user_path(@user.id), headers: @headers, params: JSON.generate({user: @user_params})
+				response_body = JSON.parse(response.body, symbolize_names: true)
+
+				expect(response_body.keys).to match([:message, :errors])
+				expect(response_body[:message]).to be_a String
+				expect(response_body[:errors]).to be_an Array
+	
+				response_body[:errors].each do |error|
+					expect(error).to be_a Hash
+					expect(error.keys).to match([:status, :title])
+					expect(error[:status]).to be_a String
+					expect(error[:status]).to eq("400")
+					expect(error[:title]).to be_a String
+					expect(error[:title]).to eq("Email is invalid")
+				end				
+			end
+		end
+	end
+
   describe "Log in a User" do
     before :each do 
       @user = create(:user)
