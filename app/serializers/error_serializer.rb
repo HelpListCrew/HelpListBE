@@ -1,10 +1,20 @@
 class ErrorSerializer
 	attr_reader :status
 
-	def initialize(object, status=404)
+	def initialize(object)
 		@object = object
 		@status = status
 	end
+
+  def self.failed_auth
+    {
+			message: "your query could not be completed",
+			errors: [{
+				"status": 401,
+				"title": "Invalid credentials"
+			}]
+		}
+  end
 
 	def user_error
 		hash = {
@@ -31,4 +41,9 @@ class ErrorSerializer
 				]
 			}
 	end
+
+  def status
+    return 404 if @object.class == ActiveRecord::RecordNotFound
+    400
+  end
 end
