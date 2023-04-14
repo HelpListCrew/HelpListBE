@@ -137,8 +137,7 @@ RSpec.describe "Wishlist Items Request" do
 
   describe "Update Wishlist Item" do
     before(:each) do
-      @recipient = create(:user, user_type: 1)
-      @wishlist_item = create(:wishlist_item, recipient: @recipient)
+      @wishlist_item = create(:wishlist_item)
     end
 
     context "when successful" do
@@ -189,6 +188,48 @@ RSpec.describe "Wishlist Items Request" do
         expect(parsed_error[:message]).to eq("your query could not be completed")
         expect(parsed_error[:errors].first[:status]).to eq("400")
         expect(parsed_error[:errors].first[:title]).to eq("Validation failed: Api item is not a number")
+      end
+    end
+  end
+
+  describe "Destroy Wishlist Item" do
+    context "when successful" do
+      it "destroys a wishlist item" do
+        wishlist_item = create(:wishlist_item)
+
+        expect(WishlistItem.count).to eq(1)
+
+        delete api_v1_wishlist_item_path(wishlist_item)
+
+        expect(response).to be_successful
+        expect(response.status).to eq(204)
+        expect(WishlistItem.count).to eq(0)
+        expect{WishlistItem.find(wishlist_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "destroys associated donor items when wishlist item deleted" do
+        wishlist_item = create(:wishlist_item)
+        donor_item = create(:donor_item, wishlist_item: wishlist_item)
+
+        delete api_v1_wishlist_item_path(wishlist_item)
+
+        expect(response).to be_successful
+        expect(DonorItem.count).to eq(0)
+        expect{DonorItem.find(donor_item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when unsuccessful" do
+      it "sends a 404 Not Found status when item id not found" do
+        delete api_v1_wishlist_item_path(0)
+
+        parsed_error = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq(404)
+        expect(parsed_error[:message]).to eq("your query could not be completed")
+        expect(parsed_error[:errors].count).to eq(1)
+        expect(parsed_error[:errors].first[:status]).to eq("404")
+        expect(parsed_error[:errors].first[:title]).to eq("Couldn't find WishlistItem with 'id'=0")
       end
     end
   end

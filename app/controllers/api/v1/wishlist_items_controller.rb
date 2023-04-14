@@ -25,6 +25,11 @@ class Api::V1::WishlistItemsController < Api::ApiController
     render json: WishlistItemSerializer.new(wishlist_item)
   end
 
+  def destroy
+    WishlistItem.destroy(params[:id])
+    render status: 204
+  end
+
   private
 	def wishlist_item_params
 		params.require(:wishlist_item).permit(:recipient_id, :api_item_id, :purchased, :received)
