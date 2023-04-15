@@ -96,10 +96,11 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (3.1.1)
+    faker (3.2.0)
       i18n (>= 1.8.11, < 2)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
+    geocoder (1.8.1)
     globalid (1.1.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -134,6 +135,8 @@ GEM
       net-protocol
     nio4r (2.5.9)
     nokogiri (1.14.3-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
     pg (1.4.6)
     pry (0.14.2)
@@ -224,6 +227,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   figaro
+  geocoder (~> 1.8)
   jsonapi-serializer
   pg (~> 1.1)
   pry
