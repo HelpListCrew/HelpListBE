@@ -34,5 +34,13 @@ RSpec.describe "User Search Request" do
       expect(parsed.keys).to eq([:data])
       expect(parsed[:data]).to eq({})
     end
+
+    it "returns a 400 error if no email parameters given" do
+      get "/api/v1/users/find_all?email="
+      parsed = JSON.parse(response.body, symbolize_names: true)
+      
+      expect(response).to have_http_status(400)
+			expect(parsed[:errors].first[:title]).to eq("ActionController::BadRequest")
+    end
   end
 end
