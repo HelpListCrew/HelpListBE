@@ -74,7 +74,7 @@ RSpec.describe "Wishlist Items Request" do
         created_wishlist_item = WishlistItem.last
 
         expect(response).to be_successful
-        expect(created_wishlist_item.api_item_id).to eq(1)
+        expect(created_wishlist_item.api_item_id).to eq("1")
         expect(created_wishlist_item.purchased).to eq(false)
         expect(created_wishlist_item.received).to eq(false)
       end
