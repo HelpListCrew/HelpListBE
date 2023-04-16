@@ -51,12 +51,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_224723) do
     t.integer "user_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uid", default: "a545f60cce88d99793758c80a6920d"
+    t.string "uid", default: "d1bc5e834ef202c9632019a5593842"
   end
 
   create_table "wishlist_items", force: :cascade do |t|
     t.bigint "recipient_id", null: false
-    t.integer "api_item_id"
+    t.string "api_item_id"
     t.boolean "purchased", default: false
     t.boolean "received", default: false
     t.datetime "created_at", null: false
