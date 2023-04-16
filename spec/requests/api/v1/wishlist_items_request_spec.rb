@@ -244,4 +244,36 @@ RSpec.describe "Wishlist Items Request" do
       end
     end
   end
+
+	describe "user's wishlist items" do
+		before do
+			@user = create(:user)
+			create_list(:wishlist_item, 4, recipient: @user)
+			@user_2 = create(:user)
+			create_list(:wishlist_item, 4, recipient: @user_2)
+		end
+
+		context "happy path" do
+			it "returns all items associated to a recepient" do
+				get api_v1_user_wishlist_items_path(@user)
+
+				expect(response).to be_successful
+
+				response_body = JSON.parse(response.body, symbolize_names: true)
+
+				expect(response_body).to be_a Hash
+
+				response_body[:data].each do |item|
+					expect(item.keys).to match([:id, :type, :attributes])
+					expect(item[:id]).to be_a String
+					expect(item[:type]).to be_a String
+					expect(item[:attributes]).to be_a Hash
+					expect(item[:attributes].keys).to match([:api_item_id, :purchased, :received])
+					expect(item[:attributes][:api_item_id]).to be_a String	
+					expect(item[:attributes][:purchased]).to be(false)				
+					expect(item[:attributes][:received]).to be(false)				
+				end
+			end
+		end
+	end
 end
