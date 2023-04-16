@@ -44,13 +44,27 @@ RSpec.describe "Organization Search Request" do
   end
 
   context "when unsuccessful" do
-    describe "returns a 200 status"
-      it "if no match found"
-    describe "returns a 404 error"
-      it "if address doesn't exist"
-      it "if nil address"
-      it "if nil miles"
-    describe "returns a 400 error"
-      it "if no parameters given"
+    describe "returns a 200 status"do
+      it "if no match found" do
+        shedd = "1200 S DuSable Lk Shr Dr, Chicago, IL 60605"
+        get "/api/v1/organizations/find_all?address=#{shedd}&miles=20"
+        parsed = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to be_successful
+        expect(parsed).to be_a(Hash)
+        expect(parsed.keys).to eq([:data])
+        expect(parsed[:data]).to eq({})
+      end
+    end
+
+    describe "returns a 400 error" do
+      it "if no parameters given" do
+        get "/api/v1/organizations/find_all?address=&miles="
+        parsed = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(400)
+			  expect(parsed[:errors].first[:title]).to eq("ActionController::BadRequest")
+      end
+    end
   end
 end
