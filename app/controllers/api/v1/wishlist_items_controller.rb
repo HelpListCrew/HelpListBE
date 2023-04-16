@@ -1,6 +1,10 @@
 class Api::V1::WishlistItemsController < Api::ApiController
   def index
-    render json: WishlistItemSerializer.new(WishlistItem.all) 
+		if params[:user_id]
+			render json: WishlistItemSerializer.new(WishlistItem.by_user(params[:user_id])), status: 201
+		else
+			render json: WishlistItemSerializer.new(WishlistItem.all) 
+		end
   end
   
   def show
