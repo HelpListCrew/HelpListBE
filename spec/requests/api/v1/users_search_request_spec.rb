@@ -25,7 +25,7 @@ RSpec.describe "User Search Request" do
   end
 
   context "when unsuccessful" do
-    it "returns a 200 error if no match found" do
+    it "returns a 200 status if no match found" do
       get "/api/v1/users/find_all?email=nIcE"
       parsed = JSON.parse(response.body, symbolize_names: true)
 
