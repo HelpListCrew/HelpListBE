@@ -81,8 +81,8 @@ RSpec.describe "Organizations Request" do
                                 street_address: "street_address",
                                 city: "city",
                                 state: "state",
-                                zip_code: "zip_code",
-                                email: "email",
+                                zip_code: 95084,
+                                email: "org@orgmail.com",
                                 phone_number: "phone_number",
                                 website: "website"
                               })
@@ -99,8 +99,8 @@ RSpec.describe "Organizations Request" do
         expect(created_organization.street_address).to eq("street_address")
         expect(created_organization.city).to eq("city")
         expect(created_organization.state).to eq("state")
-        expect(created_organization.zip_code).to eq("zip_code")
-        expect(created_organization.email).to eq("email")
+        expect(created_organization.zip_code).to eq("95084")
+        expect(created_organization.email).to eq("org@orgmail.com")
         expect(created_organization.phone_number).to eq("phone_number")
         expect(created_organization.website).to eq("website")
       end
@@ -112,7 +112,7 @@ RSpec.describe "Organizations Request" do
                                 street_address: "street_address",
                                 city: "city",
                                 state: "state",
-                                zip_code: "zip_code",
+                                zip_code: 95084,
                                 phone_number: "phone_number",
                                 website: "website"
                               })
@@ -124,6 +124,7 @@ RSpec.describe "Organizations Request" do
         response_body = JSON.parse(response.body, symbolize_names: true)
 
         expect(response_body.keys).to match([:message, :errors])
+				
         expect(response_body[:message]).to eq("your query could not be completed")
         expect(response_body[:errors].first[:status]).to eq("400")
         expect(response_body[:errors].first[:title]).to eq("Name can't be blank")
@@ -157,8 +158,8 @@ RSpec.describe "Organizations Request" do
                                 street_address: "new_street_address",
                                 city: "new_city",
                                 state: "new_state",
-                                zip_code: "new_zip_code",
-                                email: "new_email",
+                                zip_code: 95043,
+                                email: "org@email.com",
                                 phone_number: "new_phone_number",
                                 website: "new_website"
                               })
@@ -168,14 +169,14 @@ RSpec.describe "Organizations Request" do
         patch api_v1_organization_path(@organization), headers: headers, params: JSON.generate(organization: organization_params)
 
         updated_organization = Organization.last
-
+				
         expect(response).to be_successful
         expect(updated_organization.name).to eq("new_name")
         expect(updated_organization.street_address).to eq("new_street_address")
         expect(updated_organization.city).to eq("new_city")
         expect(updated_organization.state).to eq("new_state")
-        expect(updated_organization.zip_code).to eq("new_zip_code")
-        expect(updated_organization.email).to eq("new_email")
+        expect(updated_organization.zip_code).to eq("95043")
+        expect(updated_organization.email).to eq("org@email.com")
         expect(updated_organization.phone_number).to eq("new_phone_number")
         expect(updated_organization.website).to eq("new_website")
       end

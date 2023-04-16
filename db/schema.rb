@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_13_224723) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_15_213239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_224723) do
     t.string "website"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "latitude"
+    t.float "longitude"
   end
 
   create_table "users", force: :cascade do |t|
@@ -51,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_13_224723) do
     t.integer "user_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uid", default: "d1bc5e834ef202c9632019a5593842"
+    t.string "uid", default: "57df32e6060b2524291065e7c745ed"
   end
 
   create_table "wishlist_items", force: :cascade do |t|
