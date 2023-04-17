@@ -17,7 +17,8 @@ RSpec.describe "Organization Search Request" do
       :zip_code,
       :email,
       :phone_number,
-      :website
+      :website,
+      :mission_statement
     ]
   end
 
@@ -40,6 +41,7 @@ RSpec.describe "Organization Search Request" do
       expect(parsed[:data][0][:attributes][:email]).to eq(@cityhall.email)
       expect(parsed[:data][0][:attributes][:phone_number]).to eq(@cityhall.phone_number)
       expect(parsed[:data][0][:attributes][:website]).to eq(@cityhall.website)
+      expect(parsed[:data][0][:attributes][:mission_statement]).to eq(@cityhall.mission_statement)
     end
   end
 

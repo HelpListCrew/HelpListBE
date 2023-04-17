@@ -12,7 +12,7 @@ RSpec.describe "Organizations Request" do
         expect(parsed_organizations[:data]).to be_an(Array)
         expect(parsed_organizations[:data].count).to eq(3)
         
-        attribute_keys = [:name, :street_address, :city, :state, :zip_code, :email, :phone_number, :website]
+        attribute_keys = [:name, :street_address, :city, :state, :zip_code, :email, :phone_number, :website, :mission_statement]
         
         parsed_organizations[:data].each do |parsed_organization|
           expect(parsed_organization.keys).to eq([:id, :type, :attributes])
@@ -27,6 +27,7 @@ RSpec.describe "Organizations Request" do
           expect(parsed_organization[:attributes][:email]).to be_a(String)
           expect(parsed_organization[:attributes][:phone_number]).to be_a(String)
           expect(parsed_organization[:attributes][:website]).to be_a(String)
+          expect(parsed_organization[:attributes][:mission_statement]).to be_a(String)
         end
       end
     end
@@ -46,7 +47,7 @@ RSpec.describe "Organizations Request" do
 				expect(parsed_organization[:data][:id]).to eq(organization.id.to_s)
 				expect(parsed_organization[:data][:type]).to eq("organization")
 
-				expect(parsed_organization[:data][:attributes].size).to eq(8)
+				expect(parsed_organization[:data][:attributes].size).to eq(9)
 				expect(parsed_organization[:data][:attributes][:name]).to be_a(String)
         expect(parsed_organization[:data][:attributes][:street_address]).to be_a(String)
         expect(parsed_organization[:data][:attributes][:city]).to be_a(String)
@@ -55,6 +56,7 @@ RSpec.describe "Organizations Request" do
         expect(parsed_organization[:data][:attributes][:email]).to be_a(String)
         expect(parsed_organization[:data][:attributes][:phone_number]).to be_a(String)
         expect(parsed_organization[:data][:attributes][:website]).to be_a(String)
+        expect(parsed_organization[:data][:attributes][:mission_statement]).to be_a(String)
       end
     end
 
