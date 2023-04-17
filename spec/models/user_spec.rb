@@ -23,16 +23,17 @@ RSpec.describe User do
   end
 
   describe "Class Methods" do
-    it "find_recipient_by_email" do
-      user1 = create(:user, email: "helloyou@elsewhere.com", user_type: 1)
-      user2 = create(:user, email: "hellothere@somewhere.net", user_type: 1)
-      user3 = create(:user, email: "otherhello@everywhere.org", user_type: 1)
-      user4 = create(:user, email: "goodbye@nowhere.edu", user_type: 1)
-      user5 = create(:user, email: "helloitsme@there.com", user_type: 0)
+    it "find_recipient_by_username" do
+      user1 = create(:user, email: "helloyou@elsewhere.com", username: "electric_emerald",user_type: 1)
+      user2 = create(:user, email: "hellothere@somewhere.net", username: "ocianic_dreamer", user_type: 1)
+      user3 = create(:user, email: "otherhello@everywhere.org", username: "electric_tiger", user_type: 1)
+      user4 = create(:user, email: "goodbye@nowhere.edu", username: "ocean_mermaid", user_type: 1)
 
-      expect(User.find_recipient_by_email("hELlo")).to eq([user2, user1, user3])
-      expect(User.find_recipient_by_email("hELlo")).to_not eq([user4])
-      expect(User.find_recipient_by_email("hELlo")).to_not eq([user5])
+      expect(User.find_recipient_by_username("oCeAn")).to eq([user4])
+      expect(User.find_recipient_by_username("oCeAn")).to_not eq([user1])
+
+      expect(User.find_recipient_by_username("elec")).to eq([user1, user3])
+      expect(User.find_recipient_by_username("elec")).to_not eq([user2, user4])
     end
   end
 end
