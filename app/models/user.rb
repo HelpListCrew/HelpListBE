@@ -11,11 +11,18 @@ class User < ApplicationRecord
                     format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 
   validates_presence_of :password
+  # validates :username, uniqueness: true
 
   has_secure_password
 
-  def self.find_recipient_by_email(text)
-    where("email ILIKE ?", "%#{text}%")
+  # def self.find_recipient_by_email(text)
+  #   where("email ILIKE ?", "%#{text}%")
+  #     .where(user_type: 1)
+  #     .order(email: :asc)
+  # end
+
+  def self.find_recipient_by_username(text)
+    where("username ILIKE ?", "%#{text}%")
       .where(user_type: 1)
       .order(email: :asc)
   end
