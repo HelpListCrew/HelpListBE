@@ -14,7 +14,7 @@ class Api::V1::UsersController < Api::ApiController
 
   def create
     user = User.new(user_params)
-
+# require 'pry'; binding.pry
 		if user.save
     	render json: UserSerializer.new(user), status: 201
 		else
@@ -51,6 +51,6 @@ class Api::V1::UsersController < Api::ApiController
 
   private
 	def user_params
-		params.require(:user).permit(:uid, :email, :password, :user_type)
+		params.require(:user).permit(:uid, :email, :password, :user_type, :username)
 	end
 end

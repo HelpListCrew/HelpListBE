@@ -10,7 +10,6 @@ RSpec.describe "User Request" do
 		it "gets all users" do
 			get api_v1_users_path
 			parsed = JSON.parse(response.body, symbolize_names: true)
-
 			expect(response).to be_successful
 			expect(parsed[:data].size).to eq(3)
 			expect(parsed[:data]).to be_an(Array)
@@ -19,6 +18,7 @@ RSpec.describe "User Request" do
 			expect(parsed[:data][0][:type]).to eq("user")
 			expect(parsed[:data][0][:attributes][:email]).to eq(@user.email)
 			expect(parsed[:data][0][:attributes][:user_type]).to eq("donor")
+			expect(parsed[:data][0][:attributes][:username]).to eq(@user.username)
 		end
 	end
 
@@ -37,9 +37,10 @@ RSpec.describe "User Request" do
 				expect(parsed[:data].keys).to eq([:id, :type, :attributes])
 				expect(parsed[:data][:id]).to eq(@user.id.to_s)
 				expect(parsed[:data][:type]).to eq("user")
-				expect(parsed[:data][:attributes].size).to eq(2)
+				expect(parsed[:data][:attributes].size).to eq(3)
 				expect(parsed[:data][:attributes][:email]).to eq(@user.email)
 				expect(parsed[:data][:attributes][:user_type]).to eq("donor")
+				expect(parsed[:data][:attributes][:username]).to eq(@user.username)
 			end
 		end
 
@@ -58,7 +59,8 @@ RSpec.describe "User Request" do
     it "creates a new user" do
       user_params = ({
                       email: "abc@123.com",
-                      password: "password123"
+                      password: "password123",
+                      username: "pixelated_tiger"
                     })
 
       headers = { "CONTENT_TYPE" => "application/json" }
@@ -71,6 +73,26 @@ RSpec.describe "User Request" do
 
       expect(created_user.email).to eq("abc@123.com")
       expect(created_user.user_type).to eq("donor")
+      expect(created_user.username).to eq("pixelated_tiger")
+    end
+
+    it "creates a user without the presence of a username" do
+      user_params = ({
+                      email: "abc@123.com",
+                      password: "password123",
+                    })
+
+      headers = { "CONTENT_TYPE" => "application/json" }
+
+      post api_v1_users_path, headers: headers, params: JSON.generate( user: user_params )
+
+      created_user = User.last
+
+      expect(response).to be_successful
+
+      expect(created_user.email).to eq("abc@123.com")
+      expect(created_user.user_type).to eq("donor")
+      expect(created_user.username).to eq(nil)
     end
 
 		it "does not allow user to be created if invalid properties" do
@@ -110,9 +132,11 @@ RSpec.describe "User Request" do
 			@user = create(:user)
 			@previous_email = User.find_by(id: @user.id).email
 			@previous_pass = @user.password
+      @previous_username = @user.username
 			@user_params = { 
 											email: "Hello@123.com",
-											password: @previous_pass
+											password: @previous_pass,
+                      username: "Dr. Henry Killinger"
 										}
 			@headers = { "CONTENT_TYPE" => "application/json" }
 		end
@@ -126,7 +150,9 @@ RSpec.describe "User Request" do
 				expect(parsed[:data]).to be_a(Hash)
 				expect(parsed[:data].keys).to eq([:id, :type, :attributes])
 				expect(parsed[:data][:attributes][:email]).to eq(updated_user.email)
+				expect(parsed[:data][:attributes][:username]).to eq(updated_user.username)
 				expect(parsed[:data][:attributes][:email]).to_not eq(@previous_email)
+				expect(parsed[:data][:attributes][:username]).to_not eq(@previous_username)
 			end
 		end
 
@@ -175,9 +201,10 @@ RSpec.describe "User Request" do
       expect(response_body[:data].keys).to eq([:id, :type, :attributes])
       expect(response_body[:data][:id]).to eq(@user.id.to_s)
       expect(response_body[:data][:type]).to eq("user")
-      expect(response_body[:data][:attributes].size).to eq(2)
+      expect(response_body[:data][:attributes].size).to eq(3)
       expect(response_body[:data][:attributes][:email]).to eq(@user.email)
       expect(response_body[:data][:attributes][:user_type]).to eq("donor")
+      expect(response_body[:data][:attributes][:username]).to eq(@user.username)
     end
 
     it "does not autheticate a user with no creditentials" do
