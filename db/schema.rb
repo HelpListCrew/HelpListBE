@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_16_230736) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_17_201209) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,7 +53,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_16_230736) do
     t.integer "user_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uid", default: "aab7c262c79dba5c2d1ff386278f58"
+    t.string "uid", default: "57255e32c2848391fcb4b1b00f511a"
+    t.string "username"
   end
 
   create_table "wishlist_items", force: :cascade do |t|
