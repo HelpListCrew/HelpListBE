@@ -7,5 +7,6 @@ class OrganizationSerializer
              :zip_code,
              :email,
              :phone_number,
-             :website
+             :website,
+             :mission_statement
 end
