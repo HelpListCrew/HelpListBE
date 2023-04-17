@@ -36,6 +36,6 @@ class Api::V1::WishlistItemsController < Api::ApiController
 
   private
 	def wishlist_item_params
-		params.require(:wishlist_item).permit(:recipient_id, :api_item_id, :purchased, :received)
+		params.require(:wishlist_item).permit(:recipient_id, :name, :size, :image_path, :price, :api_item_id, :purchased, :received)
 	end
 end
