@@ -8,5 +8,6 @@ FactoryBot.define do
     email { Faker::Internet.email }
     phone_number { Faker::PhoneNumber.phone_number }
     website { Faker::Internet.url(host: 'example.com') }
+    mission_statement { Faker::Lorem.paragraph }
   end
 end
