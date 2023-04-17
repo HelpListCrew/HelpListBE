@@ -13,10 +13,14 @@ RSpec.describe "Wishlist Items Request" do
 				expect(parsed_wishlist_item[:data].keys).to eq([:id, :type, :attributes])
 				expect(parsed_wishlist_item[:data][:id]).to eq(wishlist_item.id.to_s)
 				expect(parsed_wishlist_item[:data][:type]).to eq("wishlist_item")
-				expect(parsed_wishlist_item[:data][:attributes].size).to eq(3)
+				expect(parsed_wishlist_item[:data][:attributes].size).to eq(7)
 				expect(parsed_wishlist_item[:data][:attributes][:api_item_id]).to eq(wishlist_item.api_item_id)
 				expect(parsed_wishlist_item[:data][:attributes][:purchased]).to eq(false)
 				expect(parsed_wishlist_item[:data][:attributes][:received]).to eq(false)
+				expect(parsed_wishlist_item[:data][:attributes][:image_path]).to eq(wishlist_item.image_path)
+				expect(parsed_wishlist_item[:data][:attributes][:size]).to eq(wishlist_item.size)
+				expect(parsed_wishlist_item[:data][:attributes][:price]).to eq(wishlist_item.price)
+				expect(parsed_wishlist_item[:data][:attributes][:name]).to eq(wishlist_item.name)
       end
     end
 
@@ -49,7 +53,7 @@ RSpec.describe "Wishlist Items Request" do
         parsed_wishlist_items[:data].each do |parsed_wishlist_item|
           expect(parsed_wishlist_item.keys).to eq([:id, :type, :attributes])
           expect(parsed_wishlist_item[:type]).to eq("wishlist_item")
-          expect(parsed_wishlist_item[:attributes].size).to eq(3)
+          expect(parsed_wishlist_item[:attributes].size).to eq(7)
           expect(parsed_wishlist_item[:attributes][:purchased]).to eq(false)
           expect(parsed_wishlist_item[:attributes][:received]).to eq(false)
         end
@@ -64,7 +68,11 @@ RSpec.describe "Wishlist Items Request" do
 
         wishlist_item_params = ({
                                 recipient_id: recipient.id, 
-                                api_item_id: 1
+                                api_item_id: 1,
+																image_path: "whatever",
+																price: 14.99,
+																size: "3 oz",
+																name: "Cookies"
                                })
 
         headers = { "CONTENT_TYPE" => "application/json" }
@@ -255,7 +263,7 @@ RSpec.describe "Wishlist Items Request" do
 
 		context "happy path" do
 			it "returns all items associated to a recepient" do
-				get api_v1_user_wishlist_items_path(@user)
+				get api_v1_wishlist_items_path, params: { user_id: 1 }
 
 				expect(response).to be_successful
 
@@ -271,7 +279,11 @@ RSpec.describe "Wishlist Items Request" do
 					expect(item[:attributes].keys).to match([:api_item_id, :purchased, :received])
 					expect(item[:attributes][:api_item_id]).to be_a String	
 					expect(item[:attributes][:purchased]).to be(false)				
-					expect(item[:attributes][:received]).to be(false)				
+					expect(item[:attributes][:received]).to be(false)
+					expect(item[:data][:attributes][:image_path]).to be_a String
+					expect(item[:data][:attributes][:size]).to be_a String
+					expect(item[:data][:attributes][:price]).to be_a Float
+					expect(item[:data][:attributes][:name]).to be_a String
 				end
 			end
 		end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_15_213239) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_16_230736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_15_213239) do
     t.integer "user_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uid", default: "57df32e6060b2524291065e7c745ed"
+    t.string "uid", default: "aab7c262c79dba5c2d1ff386278f58"
   end
 
   create_table "wishlist_items", force: :cascade do |t|
@@ -63,6 +63,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_15_213239) do
     t.boolean "received", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_path"
+    t.string "name"
+    t.float "price"
+    t.string "size"
     t.index ["recipient_id"], name: "index_wishlist_items_on_recipient_id"
   end
 
