@@ -22,6 +22,9 @@ class Api::V1::WishlistItemsController < Api::ApiController
   end
 
   def update
+		if params[:donor_id]
+			DonorItem.create(donor_id: params[:donor_id], wishlist_item_id: wishlist_item_params[:id])
+		end
     wishlist_item = WishlistItem.find(params[:id])
 
     wishlist_item.update!(wishlist_item_params)
@@ -36,6 +39,6 @@ class Api::V1::WishlistItemsController < Api::ApiController
 
   private
 	def wishlist_item_params
-		params.require(:wishlist_item).permit(:recipient_id, :name, :size, :image_path, :price, :api_item_id, :purchased, :received)
+		params.require(:wishlist_item).permit(:id, :recipient_id, :name, :size, :image_path, :price, :api_item_id, :purchased, :received)
 	end
 end
