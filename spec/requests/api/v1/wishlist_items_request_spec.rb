@@ -263,7 +263,7 @@ RSpec.describe "Wishlist Items Request" do
 
 		context "happy path" do
 			it "returns all items associated to a recepient" do
-				get api_v1_wishlist_items_path, params: { user_id: 1 }
+				get api_v1_wishlist_items_path, params: { user_id: @user.id }
 
 				expect(response).to be_successful
 
@@ -276,14 +276,14 @@ RSpec.describe "Wishlist Items Request" do
 					expect(item[:id]).to be_a String
 					expect(item[:type]).to be_a String
 					expect(item[:attributes]).to be_a Hash
-					expect(item[:attributes].keys).to match([:api_item_id, :purchased, :received])
+					expect(item[:attributes].keys).to match([:api_item_id, :purchased, :received, :size, :name, :price, :image_path])
 					expect(item[:attributes][:api_item_id]).to be_a String	
 					expect(item[:attributes][:purchased]).to be(false)				
 					expect(item[:attributes][:received]).to be(false)
-					expect(item[:data][:attributes][:image_path]).to be_a String
-					expect(item[:data][:attributes][:size]).to be_a String
-					expect(item[:data][:attributes][:price]).to be_a Float
-					expect(item[:data][:attributes][:name]).to be_a String
+					expect(item[:attributes][:image_path]).to be_a String
+					expect(item[:attributes][:size]).to be_a String
+					expect(item[:attributes][:price]).to be_a Float
+					expect(item[:attributes][:name]).to be_a String
 				end
 			end
 		end
