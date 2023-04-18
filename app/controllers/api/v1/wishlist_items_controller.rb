@@ -1,6 +1,8 @@
 class Api::V1::WishlistItemsController < Api::ApiController
   def index
-		if params[:user_id]
+    if params[:user_id] && params[:modifier] == "unpurchased"
+      render json: WishlistItemSerializer.new(WishlistItem.unpurchased_by_user(params[:user_id])), status: 201
+		elsif params[:user_id]
 			render json: WishlistItemSerializer.new(WishlistItem.by_user(params[:user_id])), status: 201
 		else
 			render json: WishlistItemSerializer.new(WishlistItem.all) 
@@ -23,7 +25,7 @@ class Api::V1::WishlistItemsController < Api::ApiController
 
   def update
 		if params[:donor_id]
-			DonorItem.create(donor_id: params[:donor_id], wishlist_item_id: wishlist_item_params[:id])
+			DonorItem.create!(donor_id: params[:donor_id], wishlist_item_id: wishlist_item_params[:id])
 		end
     wishlist_item = WishlistItem.find(params[:id])
 
