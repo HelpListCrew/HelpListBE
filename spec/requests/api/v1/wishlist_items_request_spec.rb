@@ -58,6 +58,24 @@ RSpec.describe "Wishlist Items Request" do
           expect(parsed_wishlist_item[:attributes][:received]).to eq(false)
         end
       end
+
+      it "retrieves all unpurchased user wishlist items when modifier unpurchased is in params" do
+        user = create(:user, user_type: 1)
+        create_list(:wishlist_item, 4, recipient_id: user.id)
+        create_list(:wishlist_item, 3, purchased: true, recipient_id: user.id)
+
+        get api_v1_wishlist_items_path, params: { user_id: user.id, modifier: "unpurchased" }
+
+        parsed_unpurchased_wishlist_items = JSON.parse(response.body, symbolize_names: true)
+
+        expect(WishlistItem.count).to eq(7)
+        expect(parsed_unpurchased_wishlist_items[:data]).to be_an(Array)
+        expect(parsed_unpurchased_wishlist_items[:data].count).to eq(4)
+
+        parsed_unpurchased_wishlist_items[:data].each do |unpurchased_wishlist_item|
+          expect(unpurchased_wishlist_item[:attributes][:purchased]).to eq(false)
+        end
+      end
     end
   end
 
@@ -165,6 +183,27 @@ RSpec.describe "Wishlist Items Request" do
         expect(updated_wishlist_item.purchased).to eq(true)
         expect(updated_wishlist_item.received).to eq(true)
       end
+
+      it "creates a donor_item table entry when updating with donor id" do
+        user = create(:user, user_type: 0)
+
+        wishlist_item_params = ({
+                                  id: @wishlist_item.id,
+                                  purchased: true
+                                })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        patch api_v1_wishlist_item_path(@wishlist_item), headers: headers, params: JSON.generate(wishlist_item: wishlist_item_params, donor_id: user.id)
+
+        updated_wishlist_item = WishlistItem.last
+        created_donor_item = DonorItem.last
+
+        expect(response).to be_successful
+        expect(created_donor_item.wishlist_item_id).to eq(updated_wishlist_item.id)
+        expect(created_donor_item.donor_id).to eq(user.id)
+        expect(updated_wishlist_item.purchased).to eq(true)
+      end
     end
 
     context "when unsuccessful" do
@@ -263,7 +302,7 @@ RSpec.describe "Wishlist Items Request" do
 
 		context "happy path" do
 			it "returns all items associated to a recepient" do
-				get api_v1_wishlist_items_path, params: { user_id: 1 }
+				get api_v1_wishlist_items_path, params: { user_id: @user.id }
 
 				expect(response).to be_successful
 
@@ -276,14 +315,14 @@ RSpec.describe "Wishlist Items Request" do
 					expect(item[:id]).to be_a String
 					expect(item[:type]).to be_a String
 					expect(item[:attributes]).to be_a Hash
-					expect(item[:attributes].keys).to match([:api_item_id, :purchased, :received])
+					expect(item[:attributes].keys).to match([:api_item_id, :purchased, :received, :size, :name, :price, :image_path])
 					expect(item[:attributes][:api_item_id]).to be_a String	
 					expect(item[:attributes][:purchased]).to be(false)				
 					expect(item[:attributes][:received]).to be(false)
-					expect(item[:data][:attributes][:image_path]).to be_a String
-					expect(item[:data][:attributes][:size]).to be_a String
-					expect(item[:data][:attributes][:price]).to be_a Float
-					expect(item[:data][:attributes][:name]).to be_a String
+					expect(item[:attributes][:image_path]).to be_a String
+					expect(item[:attributes][:size]).to be_a String
+					expect(item[:attributes][:price]).to be_a Float
+					expect(item[:attributes][:name]).to be_a String
 				end
 			end
 		end
