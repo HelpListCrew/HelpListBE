@@ -5,7 +5,7 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-organization = FactoryBot.create(:organization)
+organization = FactoryBot.create(:organization, mission_statement: "To empower and uplift individuals, families, and communities in need through comprehensive support, compassionate care, and sustainable solutions. ")
 organization.users.create!(email: "recipient@gmail.com", password: "123", user_type: 1)
 
 donor = User.create!(email: "donor@gmail.com", password: "123")
