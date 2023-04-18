@@ -165,6 +165,27 @@ RSpec.describe "Wishlist Items Request" do
         expect(updated_wishlist_item.purchased).to eq(true)
         expect(updated_wishlist_item.received).to eq(true)
       end
+
+      it "creates a donor_item table entry when updating with donor id" do
+        user = create(:user, user_type: 0)
+
+        wishlist_item_params = ({
+                                  id: @wishlist_item.id,
+                                  purchased: true
+                                })
+
+        headers = { "CONTENT_TYPE" => "application/json" }
+
+        patch api_v1_wishlist_item_path(@wishlist_item), headers: headers, params: JSON.generate(wishlist_item: wishlist_item_params, donor_id: user.id)
+
+        updated_wishlist_item = WishlistItem.last
+        created_donor_item = DonorItem.last
+
+        expect(response).to be_successful
+        expect(created_donor_item.wishlist_item_id).to eq(updated_wishlist_item.id)
+        expect(created_donor_item.donor_id).to eq(user.id)
+        expect(updated_wishlist_item.purchased).to eq(true)
+      end
     end
 
     context "when unsuccessful" do
