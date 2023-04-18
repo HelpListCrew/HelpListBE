@@ -5,16 +5,13 @@ class Api::V1::UsersController < Api::ApiController
 
 	def show
 		user = User.find(params[:id])
-		if user
-			render json: UserSerializer.new(user), status: 201
-		else
-			render json: ErrorSerializer.new(user).user_error, status: 404
-		end
+
+    render json: UserSerializer.new(user), status: 201
 	end
 
   def create
     user = User.new(user_params)
-# require 'pry'; binding.pry
+
 		if user.save
     	render json: UserSerializer.new(user), status: 201
 		else

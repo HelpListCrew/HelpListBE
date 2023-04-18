@@ -229,6 +229,30 @@ RSpec.describe "User Request" do
         expect(error[:title]).to eq("Invalid credentials")
       end
     end
+
+    it "authenticates a user with google oauth uid" do
+      user_params = ({
+            email: @user.email,
+            uid: "aab7c262c79dba5c2d1ff386278f58"
+          })
+
+      headers = { "CONTENT_TYPE" => "application/json" }
+
+      post "/api/v1/login", headers: headers, params: JSON.generate( user: user_params )
+      
+			response_body = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+
+      expect(response_body[:data]).to be_a(Hash)
+      expect(response_body[:data].keys).to eq([:id, :type, :attributes])
+      expect(response_body[:data][:id]).to eq(@user.id.to_s)
+      expect(response_body[:data][:type]).to eq("user")
+      expect(response_body[:data][:attributes].size).to eq(3)
+      expect(response_body[:data][:attributes][:email]).to eq(@user.email)
+      expect(response_body[:data][:attributes][:user_type]).to eq("donor")
+      expect(response_body[:data][:attributes][:username]).to eq(@user.username)
+    end
   end
 
   describe "Destroy User" do
