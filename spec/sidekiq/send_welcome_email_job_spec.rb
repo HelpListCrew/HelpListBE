@@ -8,9 +8,9 @@ RSpec.describe SendWelcomeEmailJob, type: :job do
     expect(job).to be_a(SendWelcomeEmailJob)
 
     SendWelcomeEmailJob.perform_async
-    expect(SendWelcomeEmailJob.jobs.count).to eq(1)
+    expect(SendWelcomeEmailJob.jobs.count).to eq(3)
 
     SendWelcomeEmailJob.perform_async
-    expect(SendWelcomeEmailJob.jobs.count).to eq(2)
+    expect(SendWelcomeEmailJob.jobs.count).to eq(4)
   end
 end

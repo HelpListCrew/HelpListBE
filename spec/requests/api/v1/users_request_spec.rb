@@ -233,7 +233,7 @@ RSpec.describe "User Request" do
     it "authenticates a user with google oauth uid" do
       user_params = ({
             email: @user.email,
-            uid: "74e7bb2011871460a36deb3587beb1"
+            uid: @user.uid
           })
 
       headers = { "CONTENT_TYPE" => "application/json" }
