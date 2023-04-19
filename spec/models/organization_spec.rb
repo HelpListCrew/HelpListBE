@@ -39,8 +39,8 @@ RSpec.describe Organization do
         averyhouse = "200 W Oak St, Fort Collins, CO 80521"
         aquarium = "700 Water St, Denver, CO 80211"
 
-        expect(Organization.find_orgs_near_me(averyhouse, 300)).to eq([cityhall, library, hospital, dia, zoo])
-        expect(Organization.find_orgs_near_me(aquarium, 50)).to eq([zoo, dia])
+        expect(Organization.find_orgs_near_me(averyhouse, 300)).to match([cityhall, library, hospital, dia, zoo])
+        expect(Organization.find_orgs_near_me(aquarium, 50)).to match([zoo, dia])
       end
     end
   end
