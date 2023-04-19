@@ -1,3 +1,4 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
@@ -10,4 +11,5 @@ Rails.application.routes.draw do
       post "/login", to: "users#login_user"
     end
   end
+  mount Sidekiq::Web => '/sidekiq'
 end
