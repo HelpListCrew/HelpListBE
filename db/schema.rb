@@ -54,7 +54,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_201209) do
     t.integer "user_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "uid", default: "625f38c7140a75a8f6ff421f1326be"
+    t.string "uid", default: "baf69b2c9a65223eb72a2e1bb1e561"
     t.string "username"
   end
 
