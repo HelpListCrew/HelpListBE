@@ -9,4 +9,8 @@ class WishlistItem < ApplicationRecord
 	def self.by_user(id)
 		where(recipient_id: id)
 	end
+  
+  def self.unpurchased_by_user(id)
+    where(recipient_id: id, purchased: false)
+  end
 end
