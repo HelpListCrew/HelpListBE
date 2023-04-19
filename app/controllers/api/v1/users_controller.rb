@@ -11,8 +11,9 @@ class Api::V1::UsersController < Api::ApiController
 
   def create
     user = User.new(user_params)
-
 		if user.save
+	
+      SendWelcomeEmailJob.perform_async(user.email, "Thank you for registering with HelpList") 
     	render json: UserSerializer.new(user), status: 201
 		else
 			render json: ErrorSerializer.new(user).user_error, status: 404
