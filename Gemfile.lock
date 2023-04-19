@@ -206,6 +206,8 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
+    skylight (5.3.4)
+      activesupport (>= 5.2.0)
     thor (1.2.1)
     timeout (0.3.2)
     tzinfo (2.0.6)
@@ -239,6 +241,7 @@ DEPENDENCIES
   rspec-rails
   shoulda-matchers
   simplecov
+  skylight
   tzinfo-data
 
 RUBY VERSION
