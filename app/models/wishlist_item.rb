@@ -13,4 +13,8 @@ class WishlistItem < ApplicationRecord
   def self.unpurchased_by_user(id)
     where(recipient_id: id, purchased: false)
   end
+
+  def self.donated_items(id)
+    joins(:donor_item).where(donor_items: {donor_id: id})
+  end
 end
