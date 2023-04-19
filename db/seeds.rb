@@ -32,3 +32,7 @@ FactoryBot.create(:organization, street_address: "2301 Lawrence St.", city: "Den
 organization = FactoryBot.create(:organization, street_address: "2323 Curtis St.", city: "Denver", state: "CO", zip_code: 80205)
 
 organization.users.create!(email: "organization_recipient@gmail.com", password: "123", user_type: 1)
+
+recipient = org2.users.create!(email: "aseventhrecipient@gmail.com", username: "NatureLuvr", password: "321", user_type: 1)
+wishitem1 = recipient.wishlist_items.create!(api_item_id: "0001111042315", size: "10.00", name: "Fat Free Milk", price: 5.00, image_path: "www.here.now")
+wishitem2 = recipient.wishlist_items.create!(api_item_id: "0001111041700", size: "11.00", name: "2% Milk", price: 6.00, image_path: "www.there.later")
