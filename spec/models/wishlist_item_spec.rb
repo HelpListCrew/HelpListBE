@@ -42,5 +42,28 @@ RSpec.describe WishlistItem do
         expect(WishlistItem.unpurchased_by_user(user.id).count).to eq(2)
       end
     end
+
+    describe "#donated_items" do
+      it "returns all donated items for a specific user" do
+        donor_1 = create(:user)
+        donor_2 = create(:user)
+        recipient = create(:user, user_type: 1)
+
+        create_list(:wishlist_item, 3, recipient: recipient, purchased: true)
+        create(:wishlist_item, recipient: recipient, purchased: true)
+        create_list(:wishlist_item, 5, recipient: recipient, purchased: false)
+
+        create(:donor_item, donor: donor_1, wishlist_item: WishlistItem.first)
+        create(:donor_item, donor: donor_1, wishlist_item: WishlistItem.second)
+        create(:donor_item, donor: donor_1, wishlist_item: WishlistItem.third)
+        create(:donor_item, donor: donor_2, wishlist_item: WishlistItem.fourth)
+       
+        expect(WishlistItem.donated_items(donor_1.id).count).to eq(3)
+
+        WishlistItem.donated_items(donor_1.id).each do |donated_item|
+          expect(donated_item).to be_a(WishlistItem)
+        end
+      end
+    end
   end
 end

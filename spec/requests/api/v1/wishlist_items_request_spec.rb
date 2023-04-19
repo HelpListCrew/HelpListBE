@@ -76,6 +76,29 @@ RSpec.describe "Wishlist Items Request" do
           expect(unpurchased_wishlist_item[:attributes][:purchased]).to eq(false)
         end
       end
+
+      it "retrieves all donated wishlist items for a specific user when modifier donated is in params" do
+        donor_1 = create(:user)
+        donor_2 = create(:user)
+        recipient = create(:user, user_type: 1)
+
+        create_list(:wishlist_item, 3, recipient: recipient, purchased: true)
+        create(:wishlist_item, recipient: recipient, purchased: true)
+        create_list(:wishlist_item, 5, recipient: recipient, purchased: false)
+
+        create(:donor_item, donor: donor_1, wishlist_item: WishlistItem.first)
+        create(:donor_item, donor: donor_1, wishlist_item: WishlistItem.second)
+        create(:donor_item, donor: donor_1, wishlist_item: WishlistItem.third)
+        create(:donor_item, donor: donor_2, wishlist_item: WishlistItem.fourth)
+
+        get api_v1_wishlist_items_path, params: { user_id: donor_1.id, modifier: "donated" }
+
+        parsed_donated_wishlist_items = JSON.parse(response.body, symbolize_names: true)
+
+        expect(WishlistItem.count).to eq(9)
+        expect(parsed_donated_wishlist_items[:data]).to be_an(Array)
+        expect(parsed_donated_wishlist_items[:data].count).to eq(3)
+      end
     end
   end
 
