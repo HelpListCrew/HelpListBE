@@ -9,13 +9,13 @@ organization = FactoryBot.create(:organization, mission_statement: "To empower a
 
 organization.users.create!(email: "recipient@gmail.com", password: "123", user_type: 1)
 organization.users.create!(email: "anotherrecipient@gmail.com", username: "OceanicDreamer", password: "123", user_type: 1)
-organization.users.create!(email: "athirdrecipient@gmail.com", username: "Stargazer321" password: "123", user_type: 1)
+organization.users.create!(email: "athirdrecipient@gmail.com", username: "Stargazer321", password: "123", user_type: 1)
 
 org2 = FactoryBot.create(:organization, mission_statement: nil)
 
-org2.users.create!(email: "afourthrecipient@gmail.com", username: "Stargazer321" password: "321", user_type: 1)
-org2.users.create!(email: "afifthrecipient@gmail.com", username: "CloudWatcher88" password: "321", user_type: 1)
-org2.users.create!(email: "asixthrecipient@gmail.com", username: "AdventureHikez" password: "321", user_type: 1)
+org2.users.create!(email: "afourthrecipient@gmail.com", username: "Stargazer321", password: "321", user_type: 1)
+org2.users.create!(email: "afifthrecipient@gmail.com", username: "CloudWatcher88", password: "321", user_type: 1)
+org2.users.create!(email: "asixthrecipient@gmail.com", username: "AdventureHikez", password: "321", user_type: 1)
 
 
 FactoryBot.create(:organization, street_address: "6475A Benton St.", city: "Arvada", state: "CO", zip_code: 80003)
