@@ -18,8 +18,8 @@ RSpec.describe "Find Org User Request" do
   end
 
   context "when successful" do
-    it "returns all org recipients that match a case-insensitive search, A-Z" do
-      get "/api/v1/organizations/#{@org.id}/find_all?username=hELlo"
+    it "Finds all users for an organization" do
+      get "/api/v1/organizations/#{@org.id}/find_all_users"
       parsed = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful
