@@ -6,13 +6,17 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 organization = FactoryBot.create(:organization, mission_statement: "To empower and uplift individuals, families, and communities in need through comprehensive support, compassionate care, and sustainable solutions.")
+
 organization.users.create!(email: "recipient@gmail.com", password: "123", user_type: 1)
+organization.users.create!(email: "anotherrecipient@gmail.com", username: "OceanicDreamer", password: "123", user_type: 1)
+organization.users.create!(email: "athirdrecipient@gmail.com", username: "Stargazer321", password: "123", user_type: 1)
 
-# donor = User.create!(email: "donor@gmail.com", password: "123")
+org2 = FactoryBot.create(:organization, mission_statement: nil)
 
-# User.first.wishlist_items.create!(api_item_id: 1)
+org2.users.create!(email: "afourthrecipient@gmail.com", username: "Stargazer321", password: "321", user_type: 1)
+org2.users.create!(email: "afifthrecipient@gmail.com", username: "CloudWatcher88", password: "321", user_type: 1)
+org2.users.create!(email: "asixthrecipient@gmail.com", username: "AdventureHikez", password: "321", user_type: 1)
 
-# DonorItem.create!(donor: donor, wishlist_item: WishlistItem.first)
 
 FactoryBot.create(:organization, street_address: "6475A Benton St.", city: "Arvada", state: "CO", zip_code: 80003)
 FactoryBot.create(:organization, street_address: "1535 High St.", city: "Denver", state: "CO", zip_code: 80218)
@@ -28,3 +32,7 @@ FactoryBot.create(:organization, street_address: "2301 Lawrence St.", city: "Den
 organization = FactoryBot.create(:organization, street_address: "2323 Curtis St.", city: "Denver", state: "CO", zip_code: 80205)
 
 organization.users.create!(email: "organization_recipient@gmail.com", password: "123", user_type: 1)
+
+recipient = org2.users.create!(email: "aseventhrecipient@gmail.com", username: "NatureLuvr", password: "321", user_type: 1)
+wishitem1 = recipient.wishlist_items.create!(api_item_id: "0001111042315", size: "10.00", name: "Fat Free Milk", price: 5.00, image_path: "www.here.now")
+wishitem2 = recipient.wishlist_items.create!(api_item_id: "0001111041700", size: "11.00", name: "2% Milk", price: 6.00, image_path: "www.there.later")

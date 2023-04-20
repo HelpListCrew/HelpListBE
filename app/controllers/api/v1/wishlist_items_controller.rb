@@ -26,7 +26,7 @@ class Api::V1::WishlistItemsController < Api::ApiController
   end
 
   def update
-		if params[:donor_id]
+    if params[:donor_id]
 			DonorItem.create!(donor_id: params[:donor_id], wishlist_item_id: wishlist_item_params[:id])
 		end
     wishlist_item = WishlistItem.find(params[:id])
