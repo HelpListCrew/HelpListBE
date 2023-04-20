@@ -19,7 +19,7 @@ RSpec.describe "Find Org User Request" do
 
   context "when successful" do
     it "Finds all users for an organization" do
-      get "/api/v1/organizations/#{@org.id}/find_all_users"
+      get "/api/v1/organizations/#{@org.id}/users"
       parsed = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful
