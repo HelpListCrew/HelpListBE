@@ -2,7 +2,7 @@
 ### **Helping Humans Help Humans**
 ![DV Banner](app/assets/images/dv-banner.png)
 ## HelpList Mission:
-It is estimated that over 10 million Americans experience domestic violence annually. One of the main reasons people choose to stay in these types of situations is lack of resources. HelpList's mission is to crowdsource resources to lessen the burden for survivors, and make providing resources easy and accessible to the everyday person.
+Our mission at Helplist is to harness the power of crowdsourcing to alleviate the burden for survivors as they rebuild their lives. We aim to make providing resources easy and accessible to anyone utilizing our partner orginazations, empowering everyday people to make a meaningful impact.
 ## About:
 - HelpList allows victims of domestic violence in collaboration with an organization to create personalized wishlist's of needed items to post anonymously.
 - Users can select a facility, select a wishlist, and purchase items from wishlists to be sent directly to the organization and survivors.
@@ -12,9 +12,13 @@ It is estimated that over 10 million Americans experience domestic violence annu
 ---
 
 ### Built with:
-- Ruby 3.1.1
-- Rails 7.0.4
-- PostgreSQL
+![Ruby 3.1.1](https://img.shields.io/badge/Ruby_on_Rails-CC0000?style=for-the-badge&logo=ruby-on-rails&logoColor=white)
+
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+
+![CircleCI](https://img.shields.io/badge/circleci-343434?style=for-the-badge&logo=circleci&logoColor=white)
+
+![Heroku](https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white)
 
 ### How to run the test suite
 1. `Navigate to desired directory`
@@ -31,6 +35,8 @@ It is estimated that over 10 million Americans experience domestic violence annu
 - `Recipients` are associated with an organization by way of `OrganizationUsers` table.
 - `Recipients` create `WishlistItems` records when adding Kroger API items on the frontend
 - `Donors` create `DonorItems` records when purchasing `Recipients' WishlistItems` on the frontend 
+
+<br>
 
 ## Endpoints
 
@@ -751,6 +757,63 @@ It is estimated that over 10 million Americans experience domestic violence annu
 
 <br>
 
+### Organization Users
+<details>
+  <summary>GET: All Users for Organization</summary>
+  
+  <br>
+  Request:
+
+  ```JS
+  GET /api/v1/organization/:id/users
+  ```
+
+  Response: 
+
+  | Result | Status |
+  | ------- | ------| 
+  | `Success` | 201 |
+  | `Failure`| 401 |
+
+  Params: 
+
+  | Name | Requirement | Type | Description |
+  | ----- | ----------- | -----| -------------- | 
+  | `id` | Required | string | Organization id
+
+  ```JSON
+  {
+    "data": [
+      {
+        "id": "1",
+        "type": "user",
+        "attributes": {
+          "email": "example@example.com",
+          "user_type": "donor",
+          "username": "example_username"
+        }
+      },
+
+      {
+        "id": "2",
+        "type": "user",
+        "attributes": {
+          "email": "example2@example2.com",
+          "user_type": "recipient",
+          "username": "example_username"
+        }
+      },
+    ]
+  }
+  ```
+</details>
+
+<br>
+
+---
+
+<br>
+
 ### Organizations Search
 <details>
   <summary>GET: Search Organizations</summary>
@@ -866,20 +929,5 @@ It is estimated that over 10 million Americans experience domestic violence annu
 
 <br>
 
-## Contributors
-| **Adam Baily** | **Andra Helton** | **Axel De La Guardia** | **Elle Majors** | **Jade Stewart** |
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+ ## Contributors
+| **Adam Baily** [Github](https://github.com/aj-bailey) | **Andra Helton** [GitHub](https://github.com/ALHelton)| **Axel De La Guardia** [GitHub](https://github.com/axeldelaguardia) | **Elle Majors** [GitHub](https://github.com/Elle-M) | **Jade Stewart** [GitHub](https://github.com/jadekstewart3) |
