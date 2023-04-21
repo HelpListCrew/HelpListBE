@@ -1,3 +1,5 @@
+require: rubocop-rails
+
 AllCops:
   Exclude:
     - 'db/**/*.rb'
@@ -6,9 +8,6 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Layout/TrailingEmptyLines:
-  Enabled: false
-
-Layout/TrailingBlankLines:
   Enabled: false
 
 Style/StringLiterals:
